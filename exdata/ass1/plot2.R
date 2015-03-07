@@ -1,10 +1,10 @@
-plot1 <- function() {
+plot2 <- function() {
     df <- read.csv("household_power_consumption.txt", 
                    header = TRUE, 
                    colClasses = c("character", "character", "numeric", "numeric", "numeric", "numeric", "numeric"),
                    sep = ";",
                    na.strings = c("?")) #read file
-
+    
     #combine Date and Time columns into a single POSIXlt column (Datetime)
     df <- within(df, Datetime <- as.POSIXlt(paste(Date, Time), format = "%d/%m/%Y %H:%M:%S")) 
     
@@ -15,14 +15,18 @@ plot1 <- function() {
     
     filtered <- df[ix_good, ]
     
-    #prepare graphical device
-    png("plot1.png")
+    #change to US locale to prevent non-english weekday names
+    Sys.setlocale("LC_TIME", "en_US")
     
-    #create plot1
-    hist(filtered$Global_active_power, 
-         col="red", 
-         main="Global Active Power", 
-         xlab="Global Active Power (kilowatts)")
+    #prepare graphical device
+    png("plot2.png")
+    
+    #create plot2
+    plot(filtered$Datetime, filtered$Global_active_power, 
+         main="",
+         type="l",
+         ylab="Global Active Power (kilowatts)",
+         xlab="")
     
     #close device
     dev.off()
